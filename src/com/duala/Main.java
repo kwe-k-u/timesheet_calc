@@ -35,7 +35,7 @@ public class Main {
 
             try {
                 option = input.nextInt();
-                input.close();
+//                input.close();
             } catch (Exception e){
                 System.out.println("ERROR:: Check your input");
                 continue;
