@@ -1,25 +1,84 @@
 package com.duala;
 
-import java.util.List;
-import java.util.Locale;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        while (true){
 
-            runScript();
-            System.out.println("\n\n Next duration");
-        }
+
+
+
+        controller();
 
 
 
 
     }
 
+    public static void controller(){
+        int option;
+        ArrayList day = new ArrayList<Double>();
+        ArrayList week = new ArrayList<Double>();
+        boolean run = true;
+        while (run){
+            Scanner input = new Scanner(System.in);
 
-    public  static void runScript(){
+            System.out.println("CONTROL");
+            System.out.println("0 -> Calculate day duration");
+            System.out.println("1 -> Calculate week sum (Resets records for day)");
+            System.out.println("2 -> Calculate month sum (Resets records for week)");
+            System.out.println("9 -> Remove last day calculation");
+            System.out.println("99 -> Terminate program");
+            System.out.print("Your selection >> ");
+
+            try {
+                option = input.nextInt();
+                input.close();
+            } catch (Exception e){
+                System.out.println("ERROR:: Check your input");
+                continue;
+            }
+
+
+
+            switch (option){
+                case 0: //day duration
+                    day.add(runScript());
+                    break;
+
+                case 1: //week sum
+                { //scoping sum variable
+                    double sum = calSum(day);
+                    System.out.println("Sum for the week is " + sum);
+                    week.add(sum);
+                    day.clear();
+                }
+                    break;
+                case 2: //month sum
+                { //scoping sum variable
+                    double sum = calSum(week);
+                    System.out.println("Sum for the month is " + sum);
+                }
+                    break;
+                case 9: //removing last week sum
+                    if (!day.isEmpty())
+                        day.remove(day.size()-1);
+                    break;
+                case 99:
+                    run = false;
+                    break;
+                default:
+                    System.out.println("Unrecognised entry!!");
+            }
+
+            System.out.println("\n");
+        }
+    }
+
+
+    public  static double runScript(){
         //Get the start and end times
         String startTimeStr = getUserInput("start time");
         String endTimeStr = getUserInput("end time");
@@ -32,6 +91,8 @@ public class Main {
         double result = getRatio(startTime, endTime);
 
         System.out.println(result);
+
+        return result;
 
     }
 
@@ -63,7 +124,7 @@ public class Main {
 
         String userInput = "";
         System.out.println( String.format("Enter the %s in the format HH:mm ",period));
-        System.out.print("Eg:2:15 or 17:50 >>");
+        System.out.print("Eg:2:15 or 17:50 >> ");
         userInput= input.nextLine().trim();
         if (isBadFormat(userInput)){
             userInput = getUserInput(period);
@@ -94,6 +155,20 @@ public class Main {
         double ratio = top / 60;
 
         return ratio;
+    }
+
+
+
+//    finds the sum of the elements in the array
+    public static double calSum(ArrayList<Double> list){
+        double sum = 0;
+        for (double amount :
+                list) {
+            sum += amount;
+        }
+
+
+        return sum;
     }
 
 
