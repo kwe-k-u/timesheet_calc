@@ -87,6 +87,9 @@ public class Main {
 
     //find the ration of the times
     public static double getRatio(int startTime, int endTime){
+        if (startTime > endTime){ //doing this because the end time might be in the next day
+            endTime += 24*60; //adding 24 hours
+        }
         double top = endTime - startTime;
         double ratio = top / 60;
 
