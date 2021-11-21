@@ -1,11 +1,25 @@
 package com.duala;
 
+import java.util.List;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
+        while (true){
 
+            runScript();
+            System.out.println("\n\n Next duration");
+        }
+
+
+
+
+    }
+
+
+    public  static void runScript(){
         //Get the start and end times
         String startTimeStr = getUserInput("start time");
         String endTimeStr = getUserInput("end time");
@@ -19,14 +33,27 @@ public class Main {
 
         System.out.println(result);
 
-
-
     }
 
     //checks if the entered date is of the write format
-    public static Boolean isBadFormat(){
-        //todo print a message to remind user of format
-        return false;
+    public static Boolean isBadFormat(String entry){
+
+        //state should be true if the format is acceptable
+        boolean state =  entry.contains(":") &&
+                entry.split(":").length == 2 && // checking if it contains minutes separated by hours
+                entry.toLowerCase() == entry.toUpperCase() &&// returns true if it does not contain alphabets
+                !entry.contains(",./*-+()!@#$%^&-_\" \\';`~?><{}[]=") && //does not contain symbols and spaces
+                Integer.parseInt(entry.split(":")[0]) < 24 && //hour should be less than 24 (not checking negative because of symbol check)
+                Integer.parseInt(entry.split(":")[1]) < 60 //minute count can't be more than 60 (not checking negative because of symbol check)
+                ;
+
+        state = !state;
+
+        if (state){
+            System.out.println("\nERROR: Wrong time format detected");
+        }
+
+        return state;
     }
 
     //Gets the users input as a string in the format HH:mm
@@ -38,7 +65,7 @@ public class Main {
         System.out.println( String.format("Enter the %s in the format HH:mm ",period));
         System.out.print("Eg:2:15 or 17:50 >>");
         userInput= input.nextLine().trim();
-        if (isBadFormat()){
+        if (isBadFormat(userInput)){
             userInput = getUserInput(period);
         }
 
@@ -64,5 +91,16 @@ public class Main {
         double ratio = top / 60;
 
         return ratio;
+    }
+
+
+    public static void test_isBadFormation(){
+
+        String[] testCases = {"22:00", "22", "22 50", "", "44:23"};
+
+        for (String test :
+                testCases) {
+            System.out.println(isBadFormat(test));
+        }
     }
 }
